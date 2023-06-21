@@ -1,7 +1,6 @@
-package com.me.injin.stock_issue.service;
+package com.me.injin.stock_issue.facade;
 
 import com.me.injin.stock_issue.domain.Stock;
-import com.me.injin.stock_issue.facade.OptimisticLockStockFacade;
 import com.me.injin.stock_issue.repository.StockRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,8 @@ import java.util.concurrent.Executors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class OptimisticLockStockServiceTest {
+class OptimisticLockStockFacadeTest {
+
     @Autowired
     private OptimisticLockStockFacade optimisticLockStockFacade;
 
@@ -57,5 +57,4 @@ class OptimisticLockStockServiceTest {
         Stock stock = stockRepository.findById(1L).orElseThrow();
         assertThat(stock.getQuantity()).isEqualTo(0);
     }
-
 }
