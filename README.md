@@ -27,3 +27,17 @@ create database stock_example;
 use stock_example;
 ```
 
+redis 설치
+```kotlin
+docker pull redis
+docker run --name myredis -d -p 6379:6379 redis
+
+docker exec -it f5af56809d01 redis-cli
+flushall
+```
+
+setnx cli test
+```kotlin
+setnx 1 lock
+del 1
+```
