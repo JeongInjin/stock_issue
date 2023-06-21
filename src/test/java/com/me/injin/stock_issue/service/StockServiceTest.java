@@ -2,9 +2,7 @@ package com.me.injin.stock_issue.service;
 
 import com.me.injin.stock_issue.domain.Stock;
 import com.me.injin.stock_issue.repository.StockRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,19 +12,20 @@ import java.util.concurrent.Executors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 class StockServiceTest {
 
     @Autowired
-    private StockService stockService;
+    private PessimisticLockStockService stockService;
 
     @Autowired
     private StockRepository stockRepository;
 
     @BeforeEach
     public void before() {
+        stockRepository.deleteAll(); // Make sure the database is clean before each test
         Stock stock = new Stock(1L, 100L);
-
         stockRepository.saveAndFlush(stock);
     }
 
@@ -50,7 +49,7 @@ class StockServiceTest {
         CountDownLatch latch = new CountDownLatch(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-            executorService.submit(() ->{
+            executorService.submit(() -> {
                 try {
                     stockService.decrease(1L, 1L);
                 } finally {
